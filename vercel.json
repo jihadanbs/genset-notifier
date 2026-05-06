@@ -4,5 +4,10 @@
       "path": "/api/notify",
       "schedule": "0 9 * * 3-6"
     }
-  ]
+  ],
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "nodejs20.x"
+    }
+  }
 }
