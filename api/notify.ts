@@ -4,7 +4,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_GROUP_ID;
   
-  const text = "🚨 **REMINDER JENSET** 🚨\nHalo tim, sudah waktunya menyalakan jenset. Tolong klik tombol di bawah jika jenset sudah menyala!";
+  const text = "🚨 **REMINDER JENSET** 🚨\nHALOOO BASUDEWA, sudah waktunya menyalakan jenset. Tolong klik tombol di bawah jika jenset sudah menyala!";
 
   const replyMarkup = {
     inline_keyboard: [[
