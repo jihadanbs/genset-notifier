@@ -21,7 +21,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const rows = response.data.values || [];
     
-    const logs = rows.map((row, index) => ({
+    const logs = rows
+    .filter((row) => row[0] && !row[0].toLowerCase().includes('waktu'))
+    .map((row, index) => ({
       id: index,
       time: row[0] || '-',
       name: row[1] || '-',

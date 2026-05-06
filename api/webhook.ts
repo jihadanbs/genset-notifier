@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { google } from 'googleapis';
 
+// Fungsi koneksi Google Sheets ditaruh langsung di sini
 const appendToSheet = async (staffName: string, status: string, time: string) => {
   const auth = new google.auth.GoogleAuth({
     credentials: {
@@ -11,10 +12,29 @@ const appendToSheet = async (staffName: string, status: string, time: string) =>
   });
 
   const sheets = google.sheets({ version: 'v4', auth });
+  const spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
   try {
+    const checkHeader = await sheets.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: 'Sheet1!A1:C1',
+    });
+
+    const headerData = checkHeader.data.values;
+    if (!headerData || headerData.length === 0 || !headerData[0][0]?.toLowerCase().includes('waktu')) {
+      await sheets.spreadsheets.values.append({
+        spreadsheetId: spreadsheetId,
+        range: 'Sheet1!A1:C1',
+        valueInputOption: 'USER_ENTERED',
+        requestBody: {
+          values: [['Waktu', 'Nama Staf', 'Status']],
+        },
+      });
+      console.log("Header berhasil dibuat!");
+    }
+
     await sheets.spreadsheets.values.append({
-      spreadsheetId: process.env.GOOGLE_SHEET_ID,
+      spreadsheetId: spreadsheetId,
       range: 'Sheet1!A:C', 
       valueInputOption: 'USER_ENTERED',
       requestBody: {
