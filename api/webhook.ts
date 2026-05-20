@@ -58,10 +58,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const userId = String(body.callback_query.from.id);
     const messageId = body.callback_query.message.message_id;
     const chatId = body.callback_query.message.chat.id;
+    const currentText = body.callback_query.message.text || ''; 
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const now = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
 
     if (callbackData === 'genset_on') {
+      if (currentText.includes('DINYALAKAN')) {
+        await fetch(`https://api.telegram.org/bot${token}/answerCallbackQuery`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            callback_query_id: body.callback_query.id,
+            text: `⚠️ Udah diproses bos! Sabar ya, nggak usah di-spam.`,
+          }),
+        });
+        return res.status(200).send('OK');
+      }
+
       const turnOnTimeMs = Date.now();
       await appendToSheet(staffName, 'Menyala', now, userId);
 
@@ -78,7 +91,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           }
         }),
       });
+      
     } else if (callbackData.startsWith('genset_off')) {
+      if (currentText.includes('DIMATIKAN')) {
+        await fetch(`https://api.telegram.org/bot${token}/answerCallbackQuery`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            callback_query_id: body.callback_query.id,
+            text: `⚠️ Genset udah dimatikan, nggak perlu dipencet lagi!`,
+          }),
+        });
+        return res.status(200).send('OK');
+      }
+
       const parts = callbackData.split('_');
       
       if (parts.length === 3) {
@@ -104,7 +130,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
 
       await appendToSheet(staffName, 'Mati', now, userId);
-      const oldText = body.callback_query.message.text.replace('\n\n⏳ *Genset baru boleh dimatikan setelah 30 menit operasional!*', '');
+      const oldText = currentText.replace('\n\n⏳ *Genset baru boleh dimatikan setelah 30 menit operasional!*', '');
 
       await fetch(`https://api.telegram.org/bot${token}/editMessageText`, {
         method: 'POST',
