@@ -140,7 +140,18 @@ export default function TelegramMenu() {
 
       if (logError) throw logError;
 
-      alert(`✅ SUCCESS!\n\nReport verified and submitted successfully. Distance: ${Math.round(distance)}m to the target location.`);
+      await fetch('/api/send-proof', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          staffName: staffName,
+          status: currentStatus,
+          distance: Math.round(distance),
+          photoUrl: publicUrl
+        })
+      });
+
+      alert(`✅ SUCCESS!\n\nReport verified and submitted successfully. Distance: ${Math.round(distance)}m to the target location`);
       
       setTimeout(() => {
         window.Telegram?.WebApp?.close();
