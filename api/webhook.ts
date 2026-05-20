@@ -62,6 +62,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const now = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
 
     if (callbackData === 'genset_on') {
+      const turnOnTimeMs = Date.now();
       await appendToSheet(staffName, 'Menyala', now, userId);
 
       await fetch(`https://api.telegram.org/bot${token}/editMessageText`, {
@@ -70,17 +71,40 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         body: JSON.stringify({
           chat_id: chatId,
           message_id: messageId,
-          text: `✅ Jenset **DINYALAKAN** oleh ${staffName} pada ${now}\n\n⚠️ Jangan lupa klik tombol di bawah jika sudah dimatikan!`,
+          text: `✅ Genset **DINYALAKAN** oleh ${staffName} pada ${now}\n\n⏳ *Genset baru boleh dimatikan setelah 30 menit operasional!*`,
           parse_mode: 'Markdown',
           reply_markup: {
-            inline_keyboard: [[{ text: "🔴 Sudah Dimatikan", callback_data: "genset_off" }]]
+            inline_keyboard: [[{ text: "🔴 Sudah Dimatikan", callback_data: `genset_off_${turnOnTimeMs}` }]]
           }
         }),
       });
-    } else if (callbackData === 'genset_off') {
-      await appendToSheet(staffName, 'Mati', now, userId);
+    } else if (callbackData.startsWith('genset_off')) {
+      const parts = callbackData.split('_');
+      
+      if (parts.length === 3) {
+        const turnOnTimeMs = parseInt(parts[2], 10);
+        const elapsedMs = Date.now() - turnOnTimeMs;
+        const thirtyMinsMs = 30 * 60 * 1000;
 
-      const oldText = body.callback_query.message.text.replace('⚠️ Jangan lupa klik tombol di bawah jika sudah dimatikan!', '');
+        if (elapsedMs < thirtyMinsMs) {
+          const timeLeftMins = Math.ceil((thirtyMinsMs - elapsedMs) / 60000);
+          
+          await fetch(`https://api.telegram.org/bot${token}/answerCallbackQuery`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              callback_query_id: body.callback_query.id,
+              text: `⏳ BELUM 30 MENIT!\n\nGenset baru menyala selama ${Math.floor(elapsedMs / 60000)} menit. Tunggu ${timeLeftMins} menit lagi untuk mematikan!`,
+              show_alert: true
+            }),
+          });
+          
+          return res.status(200).send('OK');
+        }
+      }
+
+      await appendToSheet(staffName, 'Mati', now, userId);
+      const oldText = body.callback_query.message.text.replace('\n\n⏳ *Genset baru boleh dimatikan setelah 30 menit operasional!*', '');
 
       await fetch(`https://api.telegram.org/bot${token}/editMessageText`, {
         method: 'POST',
@@ -88,8 +112,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         body: JSON.stringify({
           chat_id: chatId,
           message_id: messageId,
-          text: `${oldText}\n🔴 Jenset **DIMATIKAN** oleh ${staffName} pada ${now}`,
+          text: `${oldText}\n\n🔴 Genset **DIMATIKAN** oleh ${staffName} pada ${now}`,
           parse_mode: 'Markdown'
+        }),
+      });
+
+      await fetch(`https://api.telegram.org/bot${token}/answerCallbackQuery`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          callback_query_id: body.callback_query.id,
+          text: `✅ Berhasil dimatikan!`,
         }),
       });
     }
