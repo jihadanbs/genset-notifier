@@ -4,7 +4,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_GROUP_ID;
   
-  const text = "🚨 **REMINDER JENSET** 🚨\nHALOOO BASUDEWA, sudah waktunya menyalakan jenset. Tolong klik tombol di bawah jika jenset sudah menyala!";
+  const audioUrl = 'https://genset-notifier.vercel.app/your-phone-lingoging.mp3';
+  const caption = "🚨 **REMINDER JENSET** 🚨\nHALOOO BASUDEWA, sudah waktunya menyalakan genset. Tolong klik tombol di bawah jika jenset sudah menyala!";
 
   const replyMarkup = {
     inline_keyboard: [[
@@ -12,7 +13,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     ]]
   };
 
-  const url = `https://api.telegram.org/bot${token}/sendMessage`;
+  const url = `https://api.telegram.org/bot${token}/sendAudio`;
 
   try {
     await fetch(url, {
@@ -20,7 +21,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         chat_id: chatId,
-        text: text,
+        audio: audioUrl,
+        caption: caption,
         parse_mode: 'Markdown',
         reply_markup: replyMarkup
       }),
