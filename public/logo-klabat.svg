@@ -1,0 +1,16 @@
+<svg width="100%" viewBox="0 0 690 250" role="img" xmlns="http://www.w3.org/2000/svg" style="">
+<title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Logo Genset Klabat</title>
+<desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Logo Genset dan Klabat overlap nempel keren</desc>
+<rect width="680" height="240" fill="#111111" rx="12" style="fill:rgb(17, 17, 17);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+
+<!-- Baris bawah dulu (di belakang) -->
+<text x="148" y="210" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:Montserrat, &quot;Arial Black&quot;, sans-serif;font-size:108px;font-weight:900;text-anchor:start;dominant-baseline:auto">
+  <tspan fill="#5C2280" style="fill:rgb(92, 34, 128);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:Montserrat, &quot;Arial Black&quot;, sans-serif;font-size:108px;font-weight:900;text-anchor:start;dominant-baseline:auto">Kla</tspan><tspan fill="#4A1A6E" style="fill:rgb(74, 26, 110);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:Montserrat, &quot;Arial Black&quot;, sans-serif;font-size:108px;font-weight:900;text-anchor:start;dominant-baseline:auto">bat</tspan>
+</text>
+
+<!-- Baris atas (di depan, overlap ke bawah) -->
+<text x="100" y="148" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:Montserrat, &quot;Arial Black&quot;, sans-serif;font-size:108px;font-weight:900;text-anchor:start;dominant-baseline:auto">
+  <tspan fill="#ffffff" style="fill:rgb(255, 255, 255);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:Montserrat, &quot;Arial Black&quot;, sans-serif;font-size:108px;font-weight:900;text-anchor:start;dominant-baseline:auto">Gen</tspan><tspan fill="#8B35B8" style="fill:rgb(139, 53, 184);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:Montserrat, &quot;Arial Black&quot;, sans-serif;font-size:108px;font-weight:900;text-anchor:start;dominant-baseline:auto">set</tspan>
+</text>
+</svg>
