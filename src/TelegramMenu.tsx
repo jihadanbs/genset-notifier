@@ -20,7 +20,7 @@ declare global {
 }
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const R = 6371000; // Radius bumi dalam meter
+  const R = 6371000;
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
   const a =
@@ -106,9 +106,10 @@ export default function TelegramMenu() {
         return;
       }
 
-      const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
-      const staffName = tgUser?.first_name || 'Staf Lapangan';
-      const userId = tgUser?.id?.toString() || '000';
+      const queryParams = new URLSearchParams(window.location.search);
+      const staffName = queryParams.get('operator') || 'Operator';
+      const msgId = queryParams.get('msg_id') || '';
+      const userId = '000';
 
       const fileExt = photo.name.split('.').pop();
       const fileName = `${Date.now()}-${userId}.${fileExt}`;
@@ -147,7 +148,8 @@ export default function TelegramMenu() {
           staffName: staffName,
           status: currentStatus,
           distance: Math.round(distance),
-          photoUrl: publicUrl
+          photoUrl: publicUrl,
+          msgId: msgId
         })
       });
 

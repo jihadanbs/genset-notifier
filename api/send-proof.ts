@@ -13,7 +13,7 @@ type TelegramPayload = {
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
 
-  const { staffName, status, distance, photoUrl } = req.body;
+  const { staffName, status, distance, photoUrl, msgId } = req.body;
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_GROUP_ID;
 
@@ -28,7 +28,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (status.toLowerCase() === 'menyala') {
     const turnOnTimeMs = Date.now();
-    
     payload.reply_markup = {
       inline_keyboard: [[
         { text: "🔴 Request Matikan Genset", callback_data: `req_off_${turnOnTimeMs}` }
@@ -36,19 +35,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     };
   }
 
-  const url = `https://api.telegram.org/bot${token}/sendPhoto`;
-
   try {
-    const response = await fetch(url, {
+    const url = `https://api.telegram.org/bot${token}/sendPhoto`;
+    await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
 
-    const data = await response.json();
-    if (!data.ok) {
-      console.error("Telegram Error:", data);
-      return res.status(400).json({ success: false, error: data.description });
+    if (msgId) {
+      await fetch(`https://api.telegram.org/bot${token}/deleteMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: chatId,
+          message_id: msgId
+        })
+      });
     }
 
     res.status(200).json({ success: true });
