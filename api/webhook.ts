@@ -21,7 +21,7 @@ const appendToSheet = async (staffName: string, status: string, time: string, us
 
     const headerData = checkHeader.data.values;
     if (!headerData || headerData.length === 0 || !headerData[0][0]?.toLowerCase().includes('waktu')) {
-      await sheets.spreadsheets.values.append({
+      await sheets.spreadsheets.values.update({
         spreadsheetId: spreadsheetId,
         range: 'Sheet1!A1:D1',
         valueInputOption: 'USER_ENTERED',
