@@ -3,7 +3,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_GROUP_ID;
-  const webAppUrl = 'https://genset-notifier.vercel.app/telegram-menu';
+  const webAppUrl = 'https://genset-notifier.vercel.app/telegram-menu?status=Menyala';
   
   const text = "🚨 **REMINDER GENSET** 🚨\nHALOOO BASUDEWA, sudah waktunya menyalakan genset. Tolong klik tombol di bawah jika genset sudah menyala!";
 
