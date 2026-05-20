@@ -25,7 +25,7 @@ export default function DashboardStats({ logs }: { logs: LogEntry[] }) {
             <div className={`relative h-4 w-4 rounded-full border-[1.5px] ${isCurrentlyRunning ? 'bg-green-500 border-green-300' : 'bg-red-500 border-red-300'}`}></div>
           </div>
           <span className={`text-3xl font-extrabold tracking-tight ${isCurrentlyRunning ? 'text-green-400' : 'text-red-400 text-shadow-sm'}`}>
-            {isCurrentlyRunning ? 'ONLINE' : 'OFFLINE'}
+            {isCurrentlyRunning ? 'RUNNING' : 'STOPPED'}
           </span>
         </div>
         <div className="mt-4 text-xs font-medium text-zinc-500">
