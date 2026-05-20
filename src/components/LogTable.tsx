@@ -1,5 +1,6 @@
 import type { LogEntry } from '../types';
 import Avatar from './Avatar';
+import { ArrowRight } from 'lucide-react';
 
 interface LogTableProps {
   loading: boolean; 
@@ -62,7 +63,35 @@ export default function LogTable({ loading, logs, currentPage, setCurrentPage, i
                       <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors">{log.name}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4">{getStatusBadge(log.status)}</td>
+                  <td className="px-6 py-4">
+                    {log.status.toLowerCase() === 'menyala' ? (
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold text-zinc-600 bg-zinc-800/30 border border-zinc-800/50 px-2 py-1 rounded-md">
+                          STOPPED
+                        </span>
+                        
+                        <ArrowRight className="w-3 h-3 text-zinc-600" />
+                        
+                        <span className="text-[11px] font-bold text-green-400 bg-green-500/10 border border-green-500/20 px-2.5 py-1 rounded-md flex items-center gap-1.5 shadow-[0_0_10px_rgba(34,197,94,0.1)]">
+                          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                          RUNNING
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold text-zinc-600 bg-zinc-800/30 border border-zinc-800/50 px-2 py-1 rounded-md">
+                          RUNNING
+                        </span>
+                        
+                        <ArrowRight className="w-3 h-3 text-zinc-600" />
+                        
+                        <span className="text-[11px] font-bold text-red-400 bg-red-500/10 border border-red-500/20 px-2.5 py-1 rounded-md flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                          STOPPED
+                        </span>
+                      </div>
+                    )}
+                  </td>
                 </tr>
               ))
             )}
