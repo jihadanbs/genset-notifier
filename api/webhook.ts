@@ -2,7 +2,6 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
-
   const body = req.body;
 
   if (body.callback_query) {
@@ -21,7 +20,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         body: JSON.stringify({
           chat_id: chatId,
           message_id: messageId,
-          text: `⏳ **${userName}** sedang menuju genset...\n\nSilakan klik tombol di bawah untuk mengambil foto bukti.`,
+          text: `⏳ **${userName}** sedang menuju genset...\n\nSilakan klik tombol di bawah untuk mengambil foto bukti!`,
           parse_mode: 'Markdown',
           reply_markup: {
             inline_keyboard: [[ { text: "📸 Buka Kamera Laporan", url: webAppUrl } ]]
