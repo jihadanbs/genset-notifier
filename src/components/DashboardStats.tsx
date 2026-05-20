@@ -1,9 +1,16 @@
 import type { LogEntry } from '../types';
+import Avatar from './Avatar';
 
 export default function DashboardStats({ logs }: { logs: LogEntry[] }) {
   const isCurrentlyRunning = logs.length > 0 && logs[0].status.toLowerCase() === 'menyala';
   
-  const uniqueOperators = Array.from(new Set(logs.map(log => log.name)));
+  const uniqueOperatorsMap = new Map<string, string>();
+  logs.forEach(log => {
+    if (log.name && log.name !== '-') {
+      uniqueOperatorsMap.set(log.name, log.userId);
+    }
+  });
+  const uniqueOperators = Array.from(uniqueOperatorsMap.entries()).map(([name, userId]) => ({ name, userId }));
   const totalOperators = uniqueOperators.length;
 
   return (
@@ -50,16 +57,13 @@ export default function DashboardStats({ logs }: { logs: LogEntry[] }) {
         </div>
         
         <div className="mt-4 flex flex-col gap-2.5">
-          {uniqueOperators.slice(0, 2).map((name, i) => (
+          {uniqueOperators.slice(0, 2).map((op, i) => (
             <div key={i} className="flex items-center gap-3.5">
-              <div className="w-9 h-9 rounded-full bg-purple-500/15 flex items-center justify-center text-xs font-bold text-purple-400 shrink-0">
-                {name.substring(0, 2).toUpperCase()}
-              </div>
-              <span className="text-[13.5px] font-semibold text-zinc-300 truncate tracking-wide">{name}</span>
+              <Avatar name={op.name} userId={op.userId} className="w-9 h-9" />
+              <span className="text-[13.5px] font-semibold text-zinc-300 truncate tracking-wide">{op.name}</span>
             </div>
           ))}
           
-          {/* Indikator staff */}
           {totalOperators > 2 && (
             <div className="flex items-center gap-3.5 mt-0.5">
               <div className="w-9 flex items-center justify-center text-[10px] font-bold text-zinc-600 shrink-0 tracking-widest pl-1">

@@ -1,4 +1,5 @@
 import type { LogEntry } from '../types';
+import Avatar from './Avatar';
 
 interface LogTableProps {
   loading: boolean; 
@@ -57,9 +58,7 @@ export default function LogTable({ loading, logs, currentPage, setCurrentPage, i
                   <td className="px-6 py-4 text-zinc-400 text-sm font-medium">{log.time}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-7 h-7 rounded-full bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold text-xs ring-1 ring-purple-500/30 group-hover:bg-purple-500 group-hover:text-white transition-all">
-                        {log.name.charAt(0).toUpperCase()}
-                      </div>
+                      <Avatar name={log.name} userId={log.userId} className="w-7 h-7" />
                       <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors">{log.name}</span>
                     </div>
                   </td>

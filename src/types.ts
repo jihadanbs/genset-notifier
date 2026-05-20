@@ -3,4 +3,5 @@ export interface LogEntry {
   time: string;
   name: string;
   status: string;
+  userId: string;
 }

@@ -16,7 +16,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const sheets = google.sheets({ version: 'v4', auth });
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: 'Sheet1!A:C',
+      range: 'Sheet1!A:D',
     });
 
     const rows = response.data.values || [];
@@ -27,7 +27,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       id: index,
       time: row[0] || '-',
       name: row[1] || '-',
-      status: row[2] || '-'
+      status: row[2] || '-',
+      userId: row[3] || ''
     })).reverse(); 
 
     res.status(200).json({ success: true, data: logs });
