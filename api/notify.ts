@@ -9,7 +9,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const replyMarkup = {
     inline_keyboard: [[
-      { text: "📸 Buka Kamera Laporan", web_app: { url: webAppUrl } }
+      { text: "📸 Buka Kamera Laporan", url: webAppUrl }
     ]]
   };
 
