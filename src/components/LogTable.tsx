@@ -15,24 +15,6 @@ interface LogTableProps {
 export default function LogTable({ loading, logs, currentPage, setCurrentPage, itemsPerPage, setItemsPerPage, totalFiltered }: LogTableProps) {
   const totalPages = Math.ceil(totalFiltered / itemsPerPage) || 1;
 
-  const getStatusBadge = (status: string) => {
-    const s = status.toLowerCase();
-    if (s === 'menyala') {
-      return (
-        <span className="px-3 py-1 bg-green-500/10 text-green-400 rounded-md text-[11px] font-bold uppercase tracking-widest border border-green-500/20 flex items-center gap-2 w-fit">
-          <span className="w-1.5 h-1.5 rounded-full bg-green-400 shadow-[0_0_5px_#4ade80]"></span> RUNNING
-        </span>
-      );
-    } else if (s === 'mati') {
-      return (
-        <span className="px-3 py-1 bg-red-500/10 text-red-400 rounded-md text-[11px] font-bold uppercase tracking-widest border border-red-500/20 flex items-center gap-2 w-fit">
-          <span className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_5px_#f87171]"></span> STOPPED
-        </span>
-      );
-    }
-    return <span className="px-3 py-1 bg-zinc-800 text-zinc-400 rounded-md text-[11px] font-bold">{status}</span>;
-  };
-
   return (
     <div className="flex flex-col">
       <div className="overflow-x-auto min-h-[420px]">
