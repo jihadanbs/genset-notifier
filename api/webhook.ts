@@ -120,7 +120,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               callback_query_id: body.callback_query.id,
-              text: `⏳ BELUM 30 MENIT!\n\nGenset baru menyala selama ${Math.floor(elapsedMs / 60000)} menit. Tunggu ${timeLeftMins} menit lagi untuk mematikan!`,
+              text: `😝 BELUM 30 MENIT!\n\nGenset baru menyala selama ${Math.floor(elapsedMs / 60000)} menit. Tunggu ${timeLeftMins} menit lagi untuk mematikan!`,
               show_alert: true
             }),
           });
