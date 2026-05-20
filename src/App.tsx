@@ -4,6 +4,7 @@ import Header from './components/Header';
 import DashboardStats from './components/DashboardStats';
 import FilterBar from './components/FilterBar';
 import LogTable from './components/LogTable';
+import TelegramMenu from './TelegramMenu';
 
 export default function App() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -117,6 +118,10 @@ export default function App() {
     setItemsPerPage(val);
     setCurrentPage(1);
   };
+
+  if (window.location.pathname === '/telegram-menu') {
+    return <TelegramMenu />;
+  }
 
   return (
     <div className="min-h-screen bg-[#09090b] text-zinc-100 font-sans w-full p-4 sm:p-8 md:p-10 selection:bg-purple-500/30">
