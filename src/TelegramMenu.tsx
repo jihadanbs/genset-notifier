@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Camera, MapPin, Send } from 'lucide-react';
+import { supabase } from './supabase';
 
 declare global {
   interface Window {
@@ -7,6 +8,12 @@ declare global {
       WebApp?: {
         expand: () => void;
         close: () => void;
+        initDataUnsafe?: {
+          user?: {
+            id: number;
+            first_name: string;
+          };
+        };
       };
     };
   }
@@ -55,13 +62,43 @@ export default function TelegramMenu() {
       alert("⚠️ Lengkapi foto dan lokasi dulu bos!");
       return;
     }
+    
     setLoading(true);
-    
-    alert(`MANTAP! Kordinat: ${location.lat}, ${location.lng}. Foto siap diupload!`);
-    
-    setTimeout(() => {
-      window.Telegram?.WebApp?.close();
-    }, 2000);
+
+    try {
+      const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+      const staffName = tgUser?.first_name || 'Staf Web';
+      const userId = tgUser?.id?.toString() || '000';
+
+      const fileExt = photo.name.split('.').pop();
+      const fileName = `${Date.now()}-${userId}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('genset-proofs')
+        .upload(fileName, photo);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('genset-proofs')
+        .getPublicUrl(fileName);
+
+      alert(`✅ MANTAP ${staffName}!\n\nLokasi: ${location.lat}, ${location.lng}\nURL Foto: ${publicUrl}`);
+      
+      setTimeout(() => {
+        window.Telegram?.WebApp?.close();
+      }, 2000);
+
+    } catch (error: unknown) {
+      let errorMessage = "Terjadi kesalahan tidak diketahui saat upload";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      console.error(error);
+      alert(`❌ GAGAL UPLOAD: ${errorMessage}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
