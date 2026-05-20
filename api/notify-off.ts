@@ -4,10 +4,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_GROUP_ID;
   
-  const audioUrl = 'https://genset-notifier.vercel.app/deg-deg-sussy.mp3';
-  const caption = "🔔 **REMINDER: WAKTUNYA MATIKAN GENSET** 🔔\n\nHalo BASUDEWA! Sudah 30 menit ASUK. Jangan lupa matikan genset dan klik tombol **🔴 Sudah Dimatikan** di pesan sebelumnya ya!";
+  const text = "🔔 **REMINDER: WAKTUNYA MATIKAN GENSET** 🔔\n\nHalo BASUDEWA! Sudah 30 menit ASUK. Jangan lupa matikan genset dan klik tombol **🔴 Sudah Dimatikan** di pesan sebelumnya ya!";
 
-  const url = `https://api.telegram.org/bot${token}/sendAudio`;
+  const url = `https://api.telegram.org/bot${token}/sendMessage`;
 
   try {
     await fetch(url, {
@@ -15,8 +14,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         chat_id: chatId,
-        audio: audioUrl,
-        caption: caption,
+        text: text,
         parse_mode: 'Markdown',
       }),
     });
