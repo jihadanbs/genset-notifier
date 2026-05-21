@@ -52,7 +52,7 @@ export default function LogTable({ loading, logs, currentPage, setCurrentPage, i
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-[#0f0f11] border-b border-zinc-800/80 text-zinc-500 uppercase text-[10px] tracking-[0.2em]">
-                <th className="px-6 py-4 font-semibold min-w-[180px] whitespace-nowrap">Timestamp</th>
+                <th className="px-6 py-4 font-semibold min-w-[180px] whitespace-nowrap">Timestamp (WIB)</th>
                 <th className="px-6 py-4 font-semibold">Operator</th>
                 <th className="px-6 py-4 font-semibold">Status</th>
                 <th className="px-6 py-4 font-semibold">Report</th>
