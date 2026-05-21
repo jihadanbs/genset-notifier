@@ -179,7 +179,7 @@ async function compressToWebP(file: File): Promise<{ blob: Blob; originalKB: num
 
     img.onerror = () => {
       URL.revokeObjectURL(objectUrl);
-      reject(new Error('Gagal memuat gambar'));
+      reject(new Error('Gagal memuat gambar!'));
     };
 
     img.src = objectUrl;
@@ -196,10 +196,25 @@ export default function TelegramMenu() {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const currentStatus = new URLSearchParams(window.location.search).get('status') || 'Menyala';
+  const msgId = new URLSearchParams(window.location.search).get('msg_id') || '';
+  const [checking, setChecking] = useState(!!msgId);
 
   useEffect(() => {
     if (window.Telegram?.WebApp) window.Telegram.WebApp.expand();
   }, []);
+
+  useEffect(() => {
+    if (!msgId) return;
+    supabase
+      .from('genset_logs')
+      .select('id')
+      .eq('telegram_message_id', msgId)
+      .limit(1)
+      .then(({ data }) => {
+        if (data && data.length > 0) setSubmitted(true);
+        setChecking(false);
+      });
+  }, [msgId]);
 
   const dismissToast = useCallback((id: number) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
@@ -299,6 +314,7 @@ export default function TelegramMenu() {
       const { error: logError } = await supabase.from('genset_logs').insert([{
         operator_name: staffName,
         telegram_user_id: userId,
+        telegram_message_id: msgId,
         status: currentStatus,
         latitude: location.lat,
         longitude: location.lng,
@@ -334,6 +350,19 @@ export default function TelegramMenu() {
   const photoReady = !!photo;
   const allReady = gpsReady && photoReady;
   const isLocked = submitted || loading;
+
+  if (checking) {
+    return (
+      <div style={{
+        minHeight: '100svh', background: '#0a0a0a', display: 'flex',
+        alignItems: 'center', justifyContent: 'center',
+        fontFamily: "'DM Sans', system-ui, sans-serif",
+      }}>
+        <Loader2 size={24} style={{ color: '#555', animation: 'spin 1s linear infinite' }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
 
   const rowStyle = (active: boolean, enabled: boolean): React.CSSProperties => ({
     width: '100%',
