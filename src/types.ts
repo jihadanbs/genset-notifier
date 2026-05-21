@@ -4,4 +4,7 @@ export interface LogEntry {
   name: string;
   status: string;
   userId: string;
+  photoUrl?: string;
+  lat?: number;
+  lng?: number;
 }

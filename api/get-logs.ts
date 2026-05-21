@@ -1,39 +1,43 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { google } from 'googleapis';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
+const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'GET') return res.status(405).send('Method Not Allowed');
 
   try {
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      },
-      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-    });
+    const { data, error } = await supabase
+      .from('genset_logs')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-    const sheets = google.sheets({ version: 'v4', auth });
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: 'Sheet1!A:D',
-    });
+    if (error) throw error;
 
-    const rows = response.data.values || [];
-    
-    const logs = rows
-    .filter((row) => row[0] && !row[0].toLowerCase().includes('waktu'))
-    .map((row, index) => ({
-      id: index,
-      time: row[0] || '-',
-      name: row[1] || '-',
-      status: row[2] || '-',
-      userId: row[3] || ''
-    })).reverse(); 
+    const logs = data.map((row) => {
+      const timeString = new Date(row.created_at).toLocaleString('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        dateStyle: 'medium',
+        timeStyle: 'medium'
+      }).replace(/\./g, ':');
+
+      return {
+        id: row.id,
+        time: timeString,
+        name: row.operator_name || '-',
+        status: row.status || '-',
+        userId: row.telegram_user_id || '',
+        photoUrl: row.photo_url || '',
+        lat: row.latitude || '',
+        lng: row.longitude || '',
+      };
+    });
 
     res.status(200).json({ success: true, data: logs });
   } catch (error) {
-    console.error('Error fetching logs:', error);
+    console.error('Error fetching logs from Supabase:', error);
     res.status(500).json({ success: false, error: 'Failed to fetch logs' });
   }
 }

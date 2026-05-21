@@ -34,7 +34,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const buffer = await imageRes.arrayBuffer();
 
     res.setHeader('Content-Type', imageRes.headers.get('content-type') || 'image/jpeg');
-    res.setHeader('Cache-Control', 'public, max-age=86400'); // Cache 1 hari biar hemat api
+    res.setHeader('Cache-Control', 'public, max-age=86400');
     return res.status(200).send(Buffer.from(buffer));
 
   } catch (error) {

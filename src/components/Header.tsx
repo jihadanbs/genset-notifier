@@ -9,11 +9,11 @@ interface HeaderProps {
 
 export default function Header({ loading, onRefresh, filteredLogs }: HeaderProps) {
   const exportToCSV = () => {
-    const headers = ['Timestamp', 'Operator', 'Status'];
+    const headers = ['Timestamp', 'Operator', 'Status', 'Photo Link'];
 
     const rows = filteredLogs.map((log) => {
       const engStatus = log.status.toLowerCase() === 'menyala' ? 'RUNNING' : 'STOPPED';
-      return `"${log.time}","${log.name}","${engStatus}"`;
+      return `"${log.time}","${log.name}","${engStatus}","${log.photoUrl}"`;
     });
 
     const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows].join('\n');

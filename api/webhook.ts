@@ -36,13 +36,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const thirtyMinsMs = 30 * 60 * 1000;
 
       if (elapsedMs < thirtyMinsMs) {
-        const timeLeftMins = Math.ceil((thirtyMinsMs - elapsedMs) / 60000);
+        const timeLeftSecs = Math.ceil((thirtyMinsMs - elapsedMs) / 1000);
+        
+        const readyAtMs = turnOnTimeMs + thirtyMinsMs;
+        const readyAt = new Date(readyAtMs).toLocaleTimeString('id-ID', {
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZone: 'Asia/Jakarta'
+        });
+
+        const hours = Math.floor(timeLeftSecs / 3600);
+        const mins = Math.floor((timeLeftSecs % 3600) / 60);
+        const secs = timeLeftSecs % 60;
+        const countdown = hours > 0
+          ? `${hours}j ${mins}m ${secs}d`
+          : mins > 0
+          ? `${mins} menit ${secs} detik`
+          : `${secs} detik`;
+
         await fetch(`https://api.telegram.org/bot${token}/answerCallbackQuery`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             callback_query_id: body.callback_query.id,
-            text: `⏳ BELUM 30 MENIT!\nTunggu ${timeLeftMins} menit lagi bos!`,
+            text: `⏳ BELUM 30 MENIT!\n\nSisa waktu: ${countdown}\nBisa dimatikan pukul: ${readyAt} WIB`,
             show_alert: true
           }),
         });

@@ -33,7 +33,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const token = process.env.TELEGRAM_BOT_TOKEN;
         const chatId = process.env.TELEGRAM_GROUP_ID;
 
-        const alertText = `⚠️ 🚨 **PERINGATAN: WAKTU HABIS!** 🚨 ⚠️\n\nINFO TIM: Genset saat ini sudah menyala selama **${Math.floor(elapsedMinutes)} menit**!\n\n👷 Operator terakhir: **${log.operator_name}**\n\nMohon untuk segera mematikan genset melalui tombol **🔴 Request Matikan Genset** di pesan atas dan upload foto bukti!`;
+        const alertText = `🚨 **PERINGATAN: WAKTU HABIS!** 🚨\n\nINFO BOS: Genset saat ini sudah menyala selama **${Math.floor(elapsedMinutes)} menit**!\n\n👷 Operator terakhir: **${log.operator_name}**\n\nMohon untuk segera mematikan genset melalui tombol **🔴 Request Matikan Genset** di pesan atas dan upload foto bukti!`;
 
         const tgRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
           method: 'POST',

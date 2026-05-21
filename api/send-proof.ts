@@ -29,7 +29,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     second: '2-digit'
   }).replace(/\./g, ':');
 
-  const caption = `✅ **LAPORAN GENSET MASUK** ✅\n\n👷 Operator: **${staffName}**\n⚙️ Aksi: **${status.toUpperCase()}**\n⏱️ Waktu: **${timeString}**\n📍 Lokasi: **${address || 'Lokasi tidak terdeteksi'}**\n\n_Laporan diverifikasi oleh sistem GPS & Kamera._`;
+  const caption = `**LAPORAN GENSET KLABAT** \n\n👷 Operator: **${staffName}**\n⚙️ Status: **${status.toUpperCase()}**\n⏱️ Waktu: **${timeString}**\n📍 Lokasi: **${address || 'Lokasi tidak terdeteksi'}**\n\n_Laporan diverifikasi oleh sistem GPS & Kamera._`;
 
   const payload: TelegramPayload = {
     chat_id: chatId,
@@ -73,7 +73,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         });
 
         const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
-        const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
+        const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || '';
         if (supabaseUrl && supabaseKey) {
           const supabase = createClient(supabaseUrl, supabaseKey);
           
