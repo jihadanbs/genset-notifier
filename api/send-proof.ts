@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { createClient } from '@supabase/supabase-js';
 
 type TelegramPayload = {
   chat_id: string | undefined;
@@ -13,11 +14,22 @@ type TelegramPayload = {
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
 
-  const { staffName, status, distance, photoUrl, msgId } = req.body;
+  const { staffName, status, address, photoUrl, msgId } = req.body;
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_GROUP_ID;
 
-  const caption = `✅ **LAPORAN GENSET MASUK** ✅\n\n👷 Operator: **${staffName}**\n⚙️ Aksi: **${status.toUpperCase()}**\n📍 Jarak Validasi: **${distance} meter**\n\n_Laporan diverifikasi oleh sistem GPS & Kamera._`;
+  const timeString = new Date().toLocaleString('id-ID', { 
+    timeZone: 'Asia/Jakarta', 
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  }).replace(/\./g, ':');
+
+  const caption = `✅ **LAPORAN GENSET MASUK** ✅\n\n👷 Operator: **${staffName}**\n⚙️ Aksi: **${status.toUpperCase()}**\n⏱️ Waktu: **${timeString}**\n📍 Lokasi: **${address || 'Lokasi tidak terdeteksi'}**\n\n_Laporan diverifikasi oleh sistem GPS & Kamera._`;
 
   const payload: TelegramPayload = {
     chat_id: chatId,
@@ -36,8 +48,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const url = `https://api.telegram.org/bot${token}/sendPhoto`;
-    await fetch(url, {
+    await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -48,10 +59,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         await fetch(`https://api.telegram.org/bot${token}/deleteMessage`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: chatId,
-            message_id: msgId
-          })
+          body: JSON.stringify({ chat_id: chatId, message_id: msgId })
         });
       } else {
         await fetch(`https://api.telegram.org/bot${token}/editMessageReplyMarkup`, {
@@ -60,11 +68,35 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           body: JSON.stringify({
             chat_id: chatId,
             message_id: msgId,
-            reply_markup: {
-              inline_keyboard: []
-            }
+            reply_markup: { inline_keyboard: [] }
           })
         });
+
+        const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
+        const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
+        if (supabaseUrl && supabaseKey) {
+          const supabase = createClient(supabaseUrl, supabaseKey);
+          
+          const { data: lastOnLog } = await supabase
+            .from('genset_logs')
+            .select('warning_message_id')
+            .eq('status', 'Menyala')
+            .not('warning_message_id', 'is', null)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .single();
+
+          if (lastOnLog && lastOnLog.warning_message_id) {
+            await fetch(`https://api.telegram.org/bot${token}/deleteMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                chat_id: chatId, 
+                message_id: lastOnLog.warning_message_id 
+              })
+            });
+          }
+        }
       }
     }
 

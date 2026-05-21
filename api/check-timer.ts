@@ -35,7 +35,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
         const alertText = `⚠️ 🚨 **PERINGATAN: WAKTU HABIS!** 🚨 ⚠️\n\nINFO TIM: Genset saat ini sudah menyala selama **${Math.floor(elapsedMinutes)} menit**!\n\n👷 Operator terakhir: **${log.operator_name}**\n\nMohon untuk segera mematikan genset melalui tombol **🔴 Request Matikan Genset** di pesan atas dan upload foto bukti!`;
 
-        await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        const tgRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -45,16 +45,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           }),
         });
 
+        const tgData = await tgRes.json();
+        const warningMsgId = tgData.ok ? tgData.result.message_id : null;
+
         await supabase
           .from('genset_logs')
-          .update({ reminder_sent: true })
+          .update({ 
+            reminder_sent: true, 
+            warning_message_id: warningMsgId
+          })
           .eq('id', log.id);
 
-        return res.status(200).json({ message: 'Notifikasi pengingat 30 menit berhasil dikirim!' });
+        return res.status(200).json({ message: 'Notifikasi peringatan dikirim & ID disimpan!' });
       }
     }
 
-    return res.status(200).json({ message: 'Genset sedang menyala, namun belum mencapai 30 menit.' });
+    return res.status(200).json({ message: 'Genset sedang menyala, namun belum mencapai 30 menit!' });
 
   } catch (err: unknown) {
     console.error(err);
