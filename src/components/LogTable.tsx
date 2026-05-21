@@ -52,10 +52,10 @@ export default function LogTable({ loading, logs, currentPage, setCurrentPage, i
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-[#0f0f11] border-b border-zinc-800/80 text-zinc-500 uppercase text-[10px] tracking-[0.2em]">
-                <th className="px-6 py-4 font-semibold w-1/3">Timestamp (WIB)</th>
-                <th className="px-6 py-4 font-semibold w-1/3">Operator</th>
-                <th className="px-6 py-4 font-semibold w-1/3">Status</th>
-                <th className="px-6 py-4 font-semibold w-1/3">Report</th>
+                <th className="px-6 py-4 font-semibold min-w-[180px] whitespace-nowrap">Timestamp</th>
+                <th className="px-6 py-4 font-semibold">Operator</th>
+                <th className="px-6 py-4 font-semibold">Status</th>
+                <th className="px-6 py-4 font-semibold">Report</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-800/50">
@@ -70,7 +70,7 @@ export default function LogTable({ loading, logs, currentPage, setCurrentPage, i
               ) : (
                 logs.map((log) => (
                   <tr key={log.id} className="hover:bg-[#18181b] transition-colors group">
-                    <td className="px-6 py-4 text-zinc-400 text-sm font-medium">{log.time}</td>
+                    <td className="px-6 py-4 text-zinc-400 text-sm font-medium whitespace-nowrap min-w-[180px]">{log.time}</td>
                     <td className="px-6 py-4">
                       <button 
                         onClick={() => handleNameClick(log)}
@@ -118,7 +118,7 @@ export default function LogTable({ loading, logs, currentPage, setCurrentPage, i
                           className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-800/40 hover:bg-purple-600/20 border border-zinc-700/50 hover:border-purple-500/50 text-zinc-400 hover:text-purple-400 rounded-lg text-[11px] font-bold tracking-wide transition-all active:scale-95"
                         >
                           <ImageIcon className="w-3.5 h-3.5" />
-                          <span>Report</span>
+                          <span>View Image</span>
                         </button>
                       ) : (
                         <span className="text-xs text-zinc-600 italic">None</span>
