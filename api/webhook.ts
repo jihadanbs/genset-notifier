@@ -51,17 +51,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       
       const webAppUrl = `https://genset-notifier.vercel.app/telegram-menu?status=Mati&operator=${encodeURIComponent(userName)}&msg_id=${messageId}`;
       
-      await fetch(`https://api.telegram.org/bot${token}/editMessageCaption`, {
+      await fetch(`https://api.telegram.org/bot${token}/editMessageReplyMarkup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           chat_id: chatId,
           message_id: messageId,
-          caption: `✅ **Waktu OK!**\n**${userName}** sedang mematikan genset...`,
-          parse_mode: 'Markdown',
           reply_markup: {
             inline_keyboard: [[ { text: "📸 Kamera Laporan (Mati)", url: webAppUrl } ]]
           }
+        }),
+      });
+
+      await fetch(`https://api.telegram.org/bot${token}/answerCallbackQuery`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          callback_query_id: body.callback_query.id,
+          text: `✅ Waktu OK! Silakan klik tombol untuk mematikan!`,
         }),
       });
     }

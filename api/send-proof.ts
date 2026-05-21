@@ -44,14 +44,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
 
     if (msgId) {
-      await fetch(`https://api.telegram.org/bot${token}/deleteMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: chatId,
-          message_id: msgId
-        })
-      });
+      if (status.toLowerCase() === 'menyala') {
+        await fetch(`https://api.telegram.org/bot${token}/deleteMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            message_id: msgId
+          })
+        });
+      } else {
+        await fetch(`https://api.telegram.org/bot${token}/editMessageReplyMarkup`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            message_id: msgId,
+            reply_markup: {
+              inline_keyboard: []
+            }
+          })
+        });
+      }
     }
 
     res.status(200).json({ success: true });

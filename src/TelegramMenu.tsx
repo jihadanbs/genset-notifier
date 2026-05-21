@@ -84,7 +84,7 @@ export default function TelegramMenu() {
       const { data: settings, error: settingsError } = await supabase
         .from('genset_settings')
         .select('latitude, longitude, allowed_radius_meters')
-        .eq('name', 'Genset Utama')
+        .eq('name', 'Genset Klabat')
         .single();
 
       if (settingsError || !settings) {
