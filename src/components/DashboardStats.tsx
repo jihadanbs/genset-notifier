@@ -1,5 +1,6 @@
 import type { LogEntry } from '../types';
 import Avatar from './Avatar';
+import { Calendar } from 'lucide-react';
 
 export default function DashboardStats({ logs }: { logs: LogEntry[] }) {
   const isCurrentlyRunning = logs.length > 0 && logs[0].status.toLowerCase() === 'menyala';
@@ -34,8 +35,17 @@ export default function DashboardStats({ logs }: { logs: LogEntry[] }) {
       </div>
       
       {/* Total Logs Card */}
-      <div className="bg-[#121214] p-6 rounded-2xl shadow-lg flex flex-col justify-between">
-        <span className="text-[11px] font-bold text-zinc-500 uppercase tracking-[0.15em]">Operation Logs</span>
+      <div className="bg-[#121214] p-6 rounded-2xl shadow-lg flex flex-col justify-between relative">
+        <div className="flex justify-between items-start">
+          <span className="text-[11px] font-bold text-zinc-500 uppercase tracking-[0.15em]">Operation Logs</span>
+          <div className="flex items-center gap-1.5 bg-zinc-800/40 border border-zinc-700/50 px-2 py-1 rounded-md">
+            <Calendar className="w-3 h-3 text-zinc-400" />
+            <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">
+              Mon • Wed • Fri • Sat
+            </span>
+          </div>
+        </div>
+
         <div className="flex items-end justify-between mt-2">
           <span className="text-4xl font-bold text-zinc-100">{logs.length} <span className="text-sm font-medium text-zinc-600">Total</span></span>
           <div className="flex gap-1.5 h-8 items-end opacity-70">
