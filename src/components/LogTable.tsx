@@ -227,14 +227,15 @@ export default function LogTable({ loading, logs, currentPage, setCurrentPage, i
                 <span className="text-zinc-400 w-24 shrink-0 flex items-center gap-1.5">
                   <User className="w-4 h-4" /> Operator
                 </span>
-                <span className="text-zinc-100 font-bold">: {selectedDetail.name}</span>
+                <span className="text-zinc-100 font-medium">:</span>
+                <span className="text-zinc-100 font-bold">{selectedDetail.name}</span>
               </div>
               
               <div className="flex items-start gap-2">
                 <span className="text-zinc-400 w-24 shrink-0 flex items-center gap-1.5">
                   <Power className="w-4 h-4" /> Status
                 </span>
-                <span className="text-zinc-400">:</span>
+                <span className="text-zinc-100 font-medium">:</span>
                 <span
                   className={`font-bold ${
                     selectedDetail.status.toLowerCase() === 'menyala'
@@ -252,14 +253,18 @@ export default function LogTable({ loading, logs, currentPage, setCurrentPage, i
                 <span className="text-zinc-400 w-24 shrink-0 flex items-center gap-1.5">
                   <Clock className="w-4 h-4" /> Time
                 </span>
-                <span className="text-zinc-100 font-medium">: {selectedDetail.time}</span>
+                <span className="text-zinc-100 font-medium">:</span>
+                <span className="text-zinc-100 font-medium">{selectedDetail.time}</span>
               </div>
               
               <div className="flex items-start gap-2">
                 <span className="text-zinc-400 w-24 shrink-0 flex items-start gap-1.5 pt-0.5">
                   <MapPin className="w-4 h-4 shrink-0" /> Location
                 </span>
-                <span className="text-zinc-100 font-medium leading-relaxed pt-0.5">: {detailAddress}</span>
+                <span className="text-zinc-100 font-medium">:</span>
+                <span className="text-zinc-100 font-medium leading-relaxed pt-0.5 flex-1">
+                  {detailAddress}
+                </span>
               </div>
             </div>
             
