@@ -234,6 +234,7 @@ export default function LogTable({ loading, logs, currentPage, setCurrentPage, i
                 <span className="text-zinc-400 w-24 shrink-0 flex items-center gap-1.5">
                   <Power className="w-4 h-4" /> Status
                 </span>
+                <span className="text-zinc-400">:</span>
                 <span
                   className={`font-bold ${
                     selectedDetail.status.toLowerCase() === 'menyala'
@@ -241,7 +242,9 @@ export default function LogTable({ loading, logs, currentPage, setCurrentPage, i
                       : 'text-red-400'
                   }`}
                 >
-                  : {selectedDetail.status.toLowerCase() === 'menyala' ? 'RUNNING' : 'STOPPED'}
+                  {selectedDetail.status.toLowerCase() === 'menyala'
+                    ? 'RUNNING'
+                    : 'STOPPED'}
                 </span>
               </div>
               
