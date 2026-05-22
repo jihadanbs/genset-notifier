@@ -524,6 +524,10 @@ export default function TelegramMenu() {
             Ambil lokasi GPS terlebih dahulu untuk melanjutkan
           </p>
         )}
+
+        <p style={{ textAlign: 'center', fontSize: '11px', color: '#555', marginTop: '8px', lineHeight: 1.5 }}>
+          Kamera error? Klik <b>titik tiga (⋮)</b> di kanan atas,<br/>lalu pilih <b>Open in Browser</b>.
+        </p>
       </div>
 
       <style>{`
