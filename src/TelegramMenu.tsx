@@ -134,15 +134,16 @@ async function reverseGeocode(lat: number, lng: number): Promise<string> {
   }
 }
 
-const MAX_DIMENSION = 1280;
-const WEBP_QUALITY  = 0.75;
+const MAX_DIMENSION = 1024;
+const WEBP_QUALITY  = 0.60;
+const MAX_SIZE_KB = 300;
 
 async function compressToWebP(file: File): Promise<{ blob: Blob; originalKB: number; compressedKB: number }> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     const objectUrl = URL.createObjectURL(file);
 
-    img.onload = () => {
+    img.onload = async () => {
       URL.revokeObjectURL(objectUrl);
 
       let { width, height } = img;
@@ -163,18 +164,32 @@ async function compressToWebP(file: File): Promise<{ blob: Blob; originalKB: num
       if (!ctx) return reject(new Error('Canvas context not available'));
       ctx.drawImage(img, 0, 0, width, height);
 
-      canvas.toBlob(
-        (blob) => {
-          if (!blob) return reject(new Error('Gagal mengkonversi gambar ke WebP'));
-          resolve({
-            blob,
-            originalKB: Math.round(file.size / 1024),
-            compressedKB: Math.round(blob.size / 1024),
-          });
-        },
-        'image/webp',
-        WEBP_QUALITY
-      );
+      const toBlob = (q: number): Promise<Blob> =>
+        new Promise((res, rej) =>
+          canvas.toBlob(
+            (b) => (b ? res(b) : rej(new Error('Gagal mengkonversi gambar ke WebP'))),
+            'image/webp',
+            q
+          )
+        );
+
+      try {
+        let quality = WEBP_QUALITY;
+        let blob = await toBlob(quality);
+
+        while (blob.size / 1024 > MAX_SIZE_KB && quality > 0.30) {
+          quality = parseFloat((quality - 0.10).toFixed(2));
+          blob = await toBlob(quality);
+        }
+
+        resolve({
+          blob,
+          originalKB: Math.round(file.size / 1024),
+          compressedKB: Math.round(blob.size / 1024),
+        });
+      } catch (err) {
+        reject(err);
+      }
     };
 
     img.onerror = () => {

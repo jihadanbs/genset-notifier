@@ -21,7 +21,7 @@ export default function LogTable({ loading, logs, currentPage, setCurrentPage, i
 
   const handleNameClick = async (log: LogEntry) => {
     setSelectedDetail(log);
-    setDetailAddress('Mencari alamat...');
+    setDetailAddress('Looking up address...');
 
     if (log.lat && log.lng) {
       try {
@@ -52,7 +52,7 @@ export default function LogTable({ loading, logs, currentPage, setCurrentPage, i
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-[#0f0f11] border-b border-zinc-800/80 text-zinc-500 uppercase text-[10px] tracking-[0.2em]">
-                <th className="px-6 py-4 font-semibold min-w-[180px] whitespace-nowrap">Timestamp (WIB)</th>
+                <th className="px-6 py-4 font-semibold w-[25%] min-w-[180px] whitespace-nowrap">Timestamp (WIB)</th>
                 <th className="px-6 py-4 font-semibold">Operator</th>
                 <th className="px-6 py-4 font-semibold">Status</th>
                 <th className="px-6 py-4 font-semibold">Report</th>
@@ -115,9 +115,9 @@ export default function LogTable({ loading, logs, currentPage, setCurrentPage, i
                       {log.photoUrl ? (
                         <button 
                           onClick={() => setSelectedImage(log.photoUrl ?? null)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-800/40 hover:bg-purple-600/20 border border-zinc-700/50 hover:border-purple-500/50 text-zinc-400 hover:text-purple-400 rounded-lg text-[11px] font-bold tracking-wide transition-all active:scale-95"
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-800/40 hover:bg-purple-600/20 border border-zinc-700/50 hover:border-purple-500/50 text-zinc-400 hover:text-purple-400 rounded-lg text-[11px] font-bold tracking-wide transition-all active:scale-95 whitespace-nowrap w-fit"
                         >
-                          <ImageIcon className="w-3.5 h-3.5" />
+                          <ImageIcon className="w-3.5 h-3.5 shrink-0" />
                           <span>View Image</span>
                         </button>
                       ) : (
