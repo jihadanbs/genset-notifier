@@ -485,7 +485,7 @@ export default function TelegramMenu() {
           {gpsReady && !photoReady && <span style={{ fontSize: '11px', color: '#555' }}>Langkah 2</span>}
         </label>
         <input
-          id="kamera" type="file" accept="image/*" capture="environment"
+          id="kamera" type="file" accept="image/*"
           disabled={!gpsReady || isLocked} style={{ display: 'none' }} onChange={handlePhoto}
         />
 

@@ -41,7 +41,7 @@ export default function DashboardStats({ logs }: { logs: LogEntry[] }) {
           <div className="flex items-center gap-1.5 bg-zinc-800/40 border border-zinc-700/50 px-2 py-1 rounded-md">
             <Calendar className="w-3 h-3 text-zinc-400" />
             <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">
-              Mon • Wed • Fri • Sat
+              Mon • Wed • Fri
             </span>
           </div>
         </div>
