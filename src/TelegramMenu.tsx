@@ -598,7 +598,7 @@ export default function TelegramMenu() {
         )}
 
         <p style={{ textAlign: 'center', fontSize: '11px', color: '#555', marginTop: '8px', lineHeight: 1.5 }}>
-          Kamera error? Klik <b>titik tiga (⋮)</b> di kanan atas,<br/>lalu pilih <b>Open in Browser</b>.
+          Kamera error? Gunakan tombol <b>Buka di Chrome / Browser Asli</b> di atas
         </p>
       </div>
 
