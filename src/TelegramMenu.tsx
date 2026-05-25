@@ -8,6 +8,7 @@ declare global {
       WebApp?: {
         expand: () => void;
         close: () => void;
+        openLink: (url: string) => void;
         initDataUnsafe?: {
           user?: { id: number; first_name: string };
         };
@@ -213,6 +214,14 @@ export default function TelegramMenu() {
   const currentStatus = new URLSearchParams(window.location.search).get('status') || 'Menyala';
   const msgId = new URLSearchParams(window.location.search).get('msg_id') || '';
   const [checking, setChecking] = useState(!!msgId);
+
+  const openInDefaultBrowser = () => {
+    if (window.Telegram?.WebApp) {
+      window.Telegram.WebApp.openLink(window.location.href);
+    } else {
+      window.open(window.location.href, '_blank');
+    }
+  };
 
   useEffect(() => {
     if (window.Telegram?.WebApp) window.Telegram.WebApp.expand();
@@ -438,6 +447,26 @@ export default function TelegramMenu() {
           {currentStatus}
         </span>
       </div>
+
+      <button
+        onClick={openInDefaultBrowser}
+        style={{
+          width: '100%', maxWidth: '360px', marginBottom: '20px',
+          padding: '12px 16px', borderRadius: '12px',
+          background: 'rgba(59, 130, 246, 0.15)', 
+          border: '1px solid rgba(59, 130, 246, 0.4)',
+          color: '#93c5fd', fontSize: '13px', fontWeight: '600',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+          cursor: 'pointer', transition: 'all 0.2s'
+        }}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+        Buka di Chrome / Browser Asli
+      </button>
 
       {/* Steps */}
       <div style={{ width: '100%', maxWidth: '360px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
