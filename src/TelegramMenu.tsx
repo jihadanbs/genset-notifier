@@ -216,19 +216,25 @@ export default function TelegramMenu() {
   const [checking, setChecking] = useState(!!msgId);
 
   const openInDefaultBrowser = () => {
-    const currentUrl = window.location.href;
+    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+    const realUserId = tgUser?.id ? String(tgUser.id) : '';
+
+    const currentUrl = new URL(window.location.href);
+    if (realUserId) {
+      currentUrl.searchParams.set('tg_id', realUserId);
+    }
+    
     const userAgent = navigator.userAgent || navigator.vendor;
 
     if (/android/i.test(userAgent)) {
-      const urlTanpaHttps = currentUrl.replace(/^https?:\/\//, '');
-      const intentUrl = `intent://${urlTanpaHttps}#Intent;scheme=https;end;`;
-      
+      const urlTanpaHttps = currentUrl.toString().replace(/^https?:\/\//, '');
+      const intentUrl = `intent://${urlTanpaHttps}#Intent;scheme=https;package=com.android.chrome;end;`;
       window.location.href = intentUrl;
     } 
     else if (window.Telegram?.WebApp) {
-      window.Telegram.WebApp.openLink(currentUrl);
+      window.Telegram.WebApp.openLink(currentUrl.toString());
     } else {
-      window.open(currentUrl, '_blank');
+      window.open(currentUrl.toString(), '_blank');
     }
   };
 
@@ -245,11 +251,16 @@ export default function TelegramMenu() {
 
       if (isAndroid && isTelegram) {
         setTimeout(() => {
-          const currentUrl = window.location.href;
-          const urlTanpaHttps = currentUrl.replace(/^https?:\/\//, '');
+          const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+          const realUserId = tgUser?.id ? String(tgUser.id) : '';
           
+          const currentUrl = new URL(window.location.href);
+          if (realUserId) {
+            currentUrl.searchParams.set('tg_id', realUserId);
+          }
+          
+          const urlTanpaHttps = currentUrl.toString().replace(/^https?:\/\//, '');
           const intentUrl = `intent://${urlTanpaHttps}#Intent;scheme=https;package=com.android.chrome;end;`;
-          
           window.location.replace(intentUrl); 
         }, 300);
       }
@@ -355,7 +366,8 @@ export default function TelegramMenu() {
       const staffName = queryParams.get('operator') || 'Operator';
       const msgId = queryParams.get('msg_id') || '';
       const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
-      const userId = tgUser?.id ? String(tgUser.id) : '000';
+      const urlTgId = queryParams.get('tg_id');
+      const userId = urlTgId || (tgUser?.id ? String(tgUser.id) : '000');
 
       const fileName = `${Date.now()}-${userId}.webp`;
 
