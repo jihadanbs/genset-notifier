@@ -216,15 +216,46 @@ export default function TelegramMenu() {
   const [checking, setChecking] = useState(!!msgId);
 
   const openInDefaultBrowser = () => {
-    if (window.Telegram?.WebApp) {
-      window.Telegram.WebApp.openLink(window.location.href);
+    const currentUrl = window.location.href;
+    const userAgent = navigator.userAgent || navigator.vendor;
+
+    if (/android/i.test(userAgent)) {
+      const urlTanpaHttps = currentUrl.replace(/^https?:\/\//, '');
+      const intentUrl = `intent://${urlTanpaHttps}#Intent;scheme=https;end;`;
+      
+      window.location.href = intentUrl;
+    } 
+    else if (window.Telegram?.WebApp) {
+      window.Telegram.WebApp.openLink(currentUrl);
     } else {
-      window.open(window.location.href, '_blank');
+      window.open(currentUrl, '_blank');
     }
   };
 
   useEffect(() => {
     if (window.Telegram?.WebApp) window.Telegram.WebApp.expand();
+  }, []);
+
+  useEffect(() => {
+    const autoJumpToChrome = () => {
+      const userAgent = (navigator.userAgent || navigator.vendor).toLowerCase();
+      
+      const isAndroid = userAgent.includes('android');
+      const isTelegram = userAgent.includes('telegram') || userAgent.includes('wv');
+
+      if (isAndroid && isTelegram) {
+        setTimeout(() => {
+          const currentUrl = window.location.href;
+          const urlTanpaHttps = currentUrl.replace(/^https?:\/\//, '');
+          
+          const intentUrl = `intent://${urlTanpaHttps}#Intent;scheme=https;package=com.android.chrome;end;`;
+          
+          window.location.replace(intentUrl); 
+        }, 300);
+      }
+    };
+
+    autoJumpToChrome();
   }, []);
 
   useEffect(() => {
