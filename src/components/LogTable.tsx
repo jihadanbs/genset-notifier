@@ -177,23 +177,24 @@ export default function LogTable({ loading, logs, currentPage, setCurrentPage, i
 
       {selectedImage && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm transition-opacity"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 pt-16 md:p-8 backdrop-blur-sm transition-opacity"
           onClick={() => setSelectedImage(null)}
         >
+          <button 
+            onClick={() => setSelectedImage(null)}
+            className="absolute top-3 right-3 md:top-6 md:right-8 text-zinc-400 hover:text-white bg-zinc-900/80 hover:bg-zinc-800 p-2.5 rounded-full transition-all z-[60] backdrop-blur-md"
+          >
+            <X className="w-6 h-6 md:w-7 md:h-7" />
+          </button>
+
           <div 
-            className="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center justify-center animate-in fade-in zoom-in duration-200"
+            className="relative max-w-5xl w-full h-full flex flex-col items-center justify-center animate-in fade-in zoom-in duration-200"
             onClick={(e) => e.stopPropagation()}
           >
-            <button 
-              onClick={() => setSelectedImage(null)}
-              className="absolute -top-12 right-0 text-zinc-400 hover:text-white bg-zinc-900 hover:bg-zinc-800 p-2 rounded-full transition-all"
-            >
-              <X className="w-6 h-6" />
-            </button>
             <img 
               src={selectedImage} 
               alt="Genset Proof" 
-              className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl border border-zinc-800 bg-zinc-950"
+              className="max-w-full max-h-full object-contain rounded-xl shadow-2xl border border-zinc-800/50 bg-black"
             />
           </div>
         </div>
