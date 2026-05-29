@@ -8,11 +8,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const callbackData = body.callback_query.data;
     const messageId = body.callback_query.message.message_id;
     const chatId = body.callback_query.message.chat.id;
+    const userId = body.callback_query.from.id;
     const userName = body.callback_query.from.first_name;
     const token = process.env.TELEGRAM_BOT_TOKEN;
 
     if (callbackData === 'genset_on') {
-      const webAppUrl = `https://genset-notifier.vercel.app/telegram-menu?status=Menyala&operator=${encodeURIComponent(userName)}&msg_id=${messageId}`;
+      const webAppUrl = `https://genset-notifier.vercel.app/telegram-menu?status=Menyala&operator=${encodeURIComponent(userName)}&msg_id=${messageId}&tg_id=${userId}`;
       
       await fetch(`https://api.telegram.org/bot${token}/editMessageText`, {
         method: 'POST',
@@ -66,7 +67,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(200).send('OK');
       }
       
-      const webAppUrl = `https://genset-notifier.vercel.app/telegram-menu?status=Mati&operator=${encodeURIComponent(userName)}&msg_id=${messageId}`;
+      const webAppUrl = `https://genset-notifier.vercel.app/telegram-menu?status=Mati&operator=${encodeURIComponent(userName)}&msg_id=${messageId}&tg_id=${userId}`;
       
       await fetch(`https://api.telegram.org/bot${token}/editMessageReplyMarkup`, {
         method: 'POST',
