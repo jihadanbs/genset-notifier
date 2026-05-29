@@ -13,19 +13,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!BOT_TOKEN) throw new Error('Bot token not found in environment variables');
     if (!GROUP_ID) throw new Error('Group ID not found in environment variables');
 
-    const message = `⚠️ *NGINGETIN BOSS* ⚠️\n\nHalo [${name}](tg://user?id=${userId}), kamu diminta oleh BOS BOS untuk segera mengecek dan mengoperasikan Genset Klabat sekarang!`;
-    const baseUrl = 'https://genset-notifier.vercel.app/telegram-menu';
+    const message = `⚠️ *NGINGETIN DOANG* ⚠️\n\nHalo [@${name}](tg://user?id=${userId}), kamu diminta oleh BOS BOS untuk segera mengecek dan mengoperasikan Genset Klabat sekarang!`;
 
     const keyboard = {
       inline_keyboard: [
         [
           { 
-            text: "🟢 Lapor NYALA", 
-            url: `${baseUrl}?status=Menyala&operator=${encodeURIComponent(name)}`
+            text: "🟢 NYALA BOS", 
+            callback_data: "genset_on"
           },
           { 
-            text: "🔴 Lapor MATI", 
-            url: `${baseUrl}?status=Mati&operator=${encodeURIComponent(name)}`
+            text: "🔴 MATI BOS", 
+            callback_data: "req_off_0"
           }
         ]
       ]

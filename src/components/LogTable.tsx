@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { LogEntry } from '../types';
 import Avatar from './Avatar';
-import { ArrowRight, Image as ImageIcon, X, ClipboardCheck, User, Power, Clock, MapPin, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Image as ImageIcon, X, ClipboardCheck, User, Power, Clock, MapPin, ShieldCheck, AlertTriangle } from 'lucide-react';
 
 interface LogTableProps {
   loading: boolean; 
@@ -269,10 +269,17 @@ export default function LogTable({ loading, logs, currentPage, setCurrentPage, i
               </div>
             </div>
             
-            <p className="mt-6 text-[11px] text-zinc-500 italic border-t border-zinc-800/80 pt-4 flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-zinc-600" />
-              Report verified through GPS & Camera system
-            </p>
+            {selectedDetail.photoUrl && selectedDetail.lat ? (
+              <p className="mt-6 text-[11px] text-zinc-500 italic border-t border-zinc-800/80 pt-4 flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-zinc-600" />
+                Report verified through GPS & Camera system
+              </p>
+            ) : (
+              <p className="mt-6 text-[11px] text-red-400/80 italic border-t border-zinc-800/80 pt-4 flex items-center gap-1.5">
+                <AlertTriangle className="w-4 h-4 text-red-500 shrink-0" />
+                Reported as {selectedDetail.status.toLowerCase() === 'menyala' ? 'RUNNING' : 'STOPPED'}, but operator skipped photo proof
+              </p>
+            )}
           </div>
         </div>
       )}

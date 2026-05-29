@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { LogEntry } from '../types';
 import Avatar from './Avatar';
 import Tooltip from './Tooltip';
-import { Calendar, Bell, Loader2, CheckCircle2, AlertTriangle, X } from 'lucide-react';
+import { Calendar, Bell, Loader2, CheckCircle2 } from 'lucide-react';
 
 export default function DashboardStats({ logs }: { logs: LogEntry[] }) {
   const [sendingTo, setSendingTo] = useState<string | null>(null);
@@ -66,32 +66,12 @@ export default function DashboardStats({ logs }: { logs: LogEntry[] }) {
   return (
     <>
     {toast && (
-        <div className="fixed top-8 left-1/2 -translate-x-1/2 z-[200] animate-in slide-in-from-top-6 fade-in duration-300">
-          <div className={`flex items-start gap-3 px-4 py-3 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.4)] border backdrop-blur-md max-w-sm w-max ${
-            toast.type === 'success'
-              ? 'bg-[#142d1e]/95 border-green-500/30 text-green-400'
-              : 'bg-[#2d0f0f]/95 border-red-500/30 text-red-400'
-          }`}>
-            {toast.type === 'success' ? (
-              <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" />
-            ) : (
-              <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
-            )}
-            <div className="flex flex-col gap-0.5">
-              <span className="text-[13px] font-semibold text-zinc-100 leading-snug">
-                {toast.type === 'success' ? 'Request Sent' : 'Operation Failed'}
-              </span>
-              <span className="text-[11.5px] opacity-80 leading-snug max-w-[250px] truncate whitespace-normal">
-                {toast.message}
-              </span>
-            </div>
-            <button 
-              onClick={() => setToast(null)} 
-              className="ml-2 -mr-1 p-1 text-zinc-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
+        <div className={`fixed top-6 right-6 bg-[#18181b] text-zinc-200 px-6 py-3.5 rounded-xl z-50 flex items-center gap-3 animate-bounce border ${
+          toast.type === 'success' 
+            ? 'shadow-[0_0_20px_rgba(168,85,247,0.15)] border-purple-500/20' 
+            : 'shadow-[0_0_20px_rgba(248,113,113,0.15)] border-red-500/30'
+        }`}>
+          {toast.message}
         </div>
       )}
 

@@ -8,7 +8,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const replyMarkup = {
     inline_keyboard: [[
-      { text: "✅ Konfirmasi Menyala", callback_data: "genset_on" }
+      { text: "🟢 Konfirmasi Menyala", callback_data: "genset_on" }
     ]]
   };
 
