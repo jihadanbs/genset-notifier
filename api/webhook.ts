@@ -1,4 +1,9 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
+const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
@@ -13,6 +18,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const token = process.env.TELEGRAM_BOT_TOKEN;
 
     if (callbackData === 'genset_on') {
+      await supabase.from('genset_logs').insert([{
+        operator_name: userName,
+        telegram_user_id: String(userId),
+        telegram_message_id: String(messageId),
+        status: 'Menyala',
+        is_verified: false 
+      }]);
+
       const webAppUrl = `https://genset-notifier.vercel.app/telegram-menu?status=Menyala&operator=${encodeURIComponent(userName)}&msg_id=${messageId}&tg_id=${userId}`;
       
       await fetch(`https://api.telegram.org/bot${token}/editMessageText`, {
@@ -66,6 +79,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         });
         return res.status(200).send('OK');
       }
+
+      await supabase.from('genset_logs').insert([{
+        operator_name: userName,
+        telegram_user_id: String(userId),
+        telegram_message_id: String(messageId),
+        status: 'Mati',
+        is_verified: false 
+      }]);
       
       const webAppUrl = `https://genset-notifier.vercel.app/telegram-menu?status=Mati&operator=${encodeURIComponent(userName)}&msg_id=${messageId}&tg_id=${userId}`;
       

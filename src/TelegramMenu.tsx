@@ -273,11 +273,13 @@ export default function TelegramMenu() {
     if (!msgId) return;
     supabase
       .from('genset_logs')
-      .select('id')
+      .select('id, is_verified')
       .eq('telegram_message_id', msgId)
       .limit(1)
       .then(({ data }) => {
-        if (data && data.length > 0) setSubmitted(true);
+        if (data && data.length > 0 && data[0].is_verified === true) {
+          setSubmitted(true);
+        }
         setChecking(false);
       });
   }, [msgId]);
@@ -378,17 +380,16 @@ export default function TelegramMenu() {
 
       const { data: { publicUrl } } = supabase.storage.from('genset-proofs').getPublicUrl(fileName);
 
-      const { error: logError } = await supabase.from('genset_logs').insert([{
-        operator_name: staffName,
-        telegram_user_id: userId,
-        telegram_message_id: msgId,
-        status: currentStatus,
-        latitude: location.lat,
-        longitude: location.lng,
-        distance_meters: parseFloat(distance.toFixed(2)),
-        photo_url: publicUrl,
-        is_verified: true,
-      }]);
+      const { error: logError } = await supabase.from('genset_logs')
+        .update({
+          latitude: location.lat,
+          longitude: location.lng,
+          distance_meters: parseFloat(distance.toFixed(2)),
+          photo_url: publicUrl,
+          is_verified: true,
+        })
+        .eq('telegram_message_id', msgId);
+
       if (logError) throw logError;
 
       await fetch('/api/send-proof', {
